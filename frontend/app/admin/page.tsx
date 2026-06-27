@@ -418,20 +418,22 @@ export default function AdminPage() {
           </div>
 
           <div className="sm:hidden space-y-3">
-            <h1 className="text-lg font-semibold text-black">{getPageTitle()}</h1>
-            <div className="flex items-center justify-between gap-3">
-              <AutoRefreshIndicator state={autoRefresh} />
-              <div className="flex items-center gap-2 min-w-0">
-                <span className="text-xs text-black truncate max-w-[120px]">
-                  {user?.username}
-                </span>
-                <button
-                  onClick={handleLogout}
-                  className="bg-red-500 text-white px-2.5 py-1.5 rounded text-xs shrink-0"
-                >
-                  Logout
-                </button>
+            <div className="flex items-center justify-between gap-2 min-w-0">
+              <h1 className="text-lg font-semibold text-black truncate">{getPageTitle()}</h1>
+              <div className="shrink-0">
+                <AutoRefreshIndicator state={autoRefresh} />
               </div>
+            </div>
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-xs text-black truncate min-w-0">
+                {user?.username}
+              </span>
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 text-white px-2.5 py-1.5 rounded text-xs shrink-0"
+              >
+                Logout
+              </button>
             </div>
           </div>
         </header>
