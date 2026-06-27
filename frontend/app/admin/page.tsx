@@ -45,7 +45,7 @@ function EditUserModal({
 
     try {
       const res = await fetch(
-        `http://localhost:8000/auth/users/${user.username}`,
+        `${process.env.NEXT_PUBLIC_API_URL || "/api"}/auth/users/${user.username}`,
         {
           method: "PUT",
           headers: {
@@ -183,7 +183,7 @@ export default function AdminPage() {
   const fetchUsers = async () => {
     try {
       setUsersLoading(true);
-      const res = await fetch("http://localhost:8000/auth/users", {
+      const res = await fetch("${process.env.NEXT_PUBLIC_API_URL || "/api"}/auth/users", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to fetch users");
@@ -204,7 +204,7 @@ export default function AdminPage() {
       return;
     }
     try {
-      const res = await fetch("http://localhost:8000/auth/create-user", {
+      const res = await fetch("${process.env.NEXT_PUBLIC_API_URL || "/api"}/auth/create-user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -227,7 +227,7 @@ export default function AdminPage() {
   const handleDeleteUser = async (username: string) => {
     if (!confirm(`Hapus user ${username}?`)) return;
     try {
-      const res = await fetch(`http://localhost:8000/auth/users/${username}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "/api"}/auth/users/${username}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

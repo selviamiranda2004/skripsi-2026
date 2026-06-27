@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 1500); // lebih cepat
 
-      const response = await fetch("http://localhost:8000/auth/verify", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "/api"}/auth/verify`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${tokenToVerify}`,
@@ -92,10 +92,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       body: JSON.stringify({ username, password }),
     });
 
-    const data = await response.json();
+    const data = await response.json().catch(() => null);
 
     if (!response.ok) {
-      throw new Error(data.detail || "Login failed");
+      throw new Error(data?.detail || data?.message || "Login failed");
     }
 
     // langsung set tanpa verify ulang (biar cepat)
