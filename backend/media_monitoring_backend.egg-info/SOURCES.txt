@@ -1,0 +1,7 @@
+main.py
+pyproject.toml
+media_monitoring_backend.egg-info/PKG-INFO
+media_monitoring_backend.egg-info/SOURCES.txt
+media_monitoring_backend.egg-info/dependency_links.txt
+media_monitoring_backend.egg-info/requires.txt
+media_monitoring_backend.egg-info/top_level.txt

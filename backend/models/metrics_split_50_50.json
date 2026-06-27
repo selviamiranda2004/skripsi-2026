@@ -1,0 +1,85 @@
+{
+  "svm": {
+    "support": 358,
+    "accuracy": 0.7513966480446927,
+    "macro": {
+      "precision": 0.7462235476941359,
+      "recall": 0.6851292571276616,
+      "f1": 0.7089566296753533
+    },
+    "weighted": {
+      "precision": 0.7496865537245097,
+      "recall": 0.7513966480446927,
+      "f1": 0.747238566675104
+    },
+    "macro_f1": 0.7089566296753533,
+    "weighted_f1": 0.747238566675104,
+    "per_class": {
+      "positif": {
+        "precision": 0.7873303167420814,
+        "recall": 0.8571428571428571,
+        "f1": 0.8207547169811321,
+        "support": 203
+      },
+      "negatif": {
+        "precision": 0.7878787878787878,
+        "recall": 0.5652173913043478,
+        "f1": 0.6582278481012658,
+        "support": 46
+      },
+      "netral": {
+        "precision": 0.6634615384615384,
+        "recall": 0.6330275229357798,
+        "f1": 0.647887323943662,
+        "support": 109
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "positif",
+        "negatif",
+        "netral"
+      ],
+      "matrix": [
+        [
+          174,
+          6,
+          23
+        ],
+        [
+          8,
+          26,
+          12
+        ],
+        [
+          39,
+          1,
+          69
+        ]
+      ]
+    }
+  },
+  "split": {
+    "test_size": 0.5,
+    "train_size": 0.5,
+    "n_train": 357,
+    "n_test": 358,
+    "seed": 42,
+    "label": "50:50"
+  },
+  "meta": {
+    "trained_at": "2026-06-04T11:43:27.576430+00:00",
+    "data_info": {
+      "seed_rows": 0,
+      "seed_distribution": {},
+      "db_rows": 873,
+      "db_distribution": {
+        "positif": 505,
+        "netral": 259,
+        "negatif": 109
+      },
+      "total_rows": 715
+    },
+    "trigger": "api"
+  }
+}

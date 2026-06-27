@@ -1,0 +1,6 @@
+Metadata-Version: 2.4
+Name: media-monitoring-backend
+Version: 1.0.0
+Summary: Media Monitoring Dashboard API for Kementerian UMKM
+Requires-Python: >=3.12
+Requires-Dist: fastapi[standard]>=0.128.1

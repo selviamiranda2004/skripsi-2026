@@ -1,0 +1,15 @@
+[project]
+name = "media-monitoring-backend"
+version = "1.0.0"
+description = "Media Monitoring Dashboard API for Kementerian UMKM"
+requires-python = ">=3.12"
+dependencies = [
+    "bcrypt>=5.0.0",
+    "fastapi[standard]>=0.128.1",
+    "psycopg2-binary>=2.9.11",
+    "pyjwt>=2.12.1",
+    "scikit-learn>=1.5.0",
+    "joblib>=1.4.0",
+    "pandas>=2.2.0",
+    "Sastrawi>=1.0.1",
+]
