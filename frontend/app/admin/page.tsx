@@ -401,26 +401,37 @@ export default function AdminPage() {
 
       <main className="lg:ml-64 min-h-screen">
         <header className="sticky top-0 z-20 bg-white backdrop-blur-md border-b border-border px-4 sm:px-6 py-4">
-          <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
-            <div className="min-w-0">
-              <h1 className="text-lg sm:text-xl font-semibold text-black">{getPageTitle()}</h1>
-              <div className="mt-2 sm:hidden">
-                <AutoRefreshIndicator state={autoRefresh} />
-              </div>
-            </div>
-            <div className="flex items-center justify-between gap-3 w-full sm:w-auto sm:justify-start sm:gap-4">
-              <div className="hidden sm:block">
-                <AutoRefreshIndicator state={autoRefresh} />
-              </div>
-              <span className="text-xs sm:text-sm text-black truncate">
+          <div className="hidden sm:flex sm:justify-between sm:items-center">
+            <h1 className="text-xl font-semibold text-black">{getPageTitle()}</h1>
+            <div className="flex items-center gap-4">
+              <AutoRefreshIndicator state={autoRefresh} />
+              <span className="text-sm text-black">
                 {user?.username} ({user?.role})
               </span>
               <button
                 onClick={handleLogout}
-                className="bg-red-500 text-white px-3 py-1.5 rounded text-sm shrink-0"
+                className="bg-red-500 text-white px-3 py-1 rounded text-sm"
               >
                 Logout
               </button>
+            </div>
+          </div>
+
+          <div className="sm:hidden space-y-3">
+            <h1 className="text-lg font-semibold text-black">{getPageTitle()}</h1>
+            <div className="flex items-center justify-between gap-3">
+              <AutoRefreshIndicator state={autoRefresh} />
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="text-xs text-black truncate max-w-[120px]">
+                  {user?.username}
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="bg-red-500 text-white px-2.5 py-1.5 rounded text-xs shrink-0"
+                >
+                  Logout
+                </button>
+              </div>
             </div>
           </div>
         </header>
