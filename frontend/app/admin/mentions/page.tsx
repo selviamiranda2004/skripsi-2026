@@ -1,7 +1,7 @@
 "use client";
 
 import useSWR, { mutate } from "swr";
-import { fetcher } from "@/services/api";
+import { BASE_URL, fetcher } from "@/services/api";
 import {
   ExternalLink,
   Calendar,
@@ -26,8 +26,10 @@ interface MentionsData {
 }
 
 export default function AdminMentionsPage() {
+  const mentionsKey = `${BASE_URL}/mentions`;
+
   const { data, error, isLoading } = useSWR<MentionsData>(
-    "http://127.0.0.1:8000/mentions",
+    mentionsKey,
     fetcher
   );
 
@@ -36,7 +38,7 @@ export default function AdminMentionsPage() {
     sentiment: "positif" | "negatif" | "netral"
   ) => {
     try {
-      await fetch(`http://127.0.0.1:8000/mentions/${id}`, {
+      await fetch(`${BASE_URL}/mentions/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -44,7 +46,7 @@ export default function AdminMentionsPage() {
         body: JSON.stringify({ sentiment }),
       });
 
-      mutate("http://127.0.0.1:8000/mentions");
+      mutate(mentionsKey);
     } catch (err) {
       console.error("Failed to update sentiment:", err);
     }
@@ -52,11 +54,11 @@ export default function AdminMentionsPage() {
 
   const deleteMention = async (id: number) => {
     try {
-      await fetch(`http://127.0.0.1:8000/mentions/${id}`, {
+      await fetch(`${BASE_URL}/mentions/${id}`, {
         method: "DELETE",
       });
 
-      mutate("http://127.0.0.1:8000/mentions");
+      mutate(mentionsKey);
     } catch (err) {
       console.error("Failed to delete mention:", err);
     }
