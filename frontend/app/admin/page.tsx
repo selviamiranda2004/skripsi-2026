@@ -183,7 +183,7 @@ export default function AdminPage() {
   const fetchUsers = async () => {
     try {
       setUsersLoading(true);
-      const res = await fetch("${process.env.NEXT_PUBLIC_API_URL || "/api"}/auth/users", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "/api"}/auth/users`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to fetch users");
@@ -204,7 +204,7 @@ export default function AdminPage() {
       return;
     }
     try {
-      const res = await fetch("${process.env.NEXT_PUBLIC_API_URL || "/api"}/auth/create-user", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "/api"}/auth/create-user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
