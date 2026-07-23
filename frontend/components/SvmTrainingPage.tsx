@@ -467,13 +467,8 @@ export default function SvmTrainingPage() {
           <div className="space-y-4">
             <MetricsCards m={m} />
             <div className="bg-white border border-border rounded-xl p-4">
-<<<<<<< HEAD
               <p className="text-sm font-semibold mb-2 text-black">
-  Confusion Matrix (n = {metrics.labeled_count})
-=======
-            <p className="text-sm font-semibold mb-2 text-black">
   Confusion Matrix (n = {status?.labeled ?? metrics.labeled_count})
->>>>>>> 6d7b12f991bc33cc19b2204869928dde0609faab
 </p>
               <ConfusionMatrixView cm={m.confusion_matrix} />
             </div>
