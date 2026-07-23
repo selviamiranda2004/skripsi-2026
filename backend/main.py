@@ -1950,13 +1950,7 @@ async def svm_retrain(
 
     if not (0.05 <= test_size <= 0.5):
         raise HTTPException(400, "test_size harus 0.05 - 0.5")
-
-   df, info = load_training_data(
-    include_db_labels=True,
-    use_seed=False,
-    db_limit=749,
-    skip_dedup=True,
-)
+df, info = load_training_data(include_db_labels=True, use_seed=False)
     if df["label"].nunique() < 2:
         raise HTTPException(status_code=400, detail="Dataset cuma punya 1 kelas")
 
