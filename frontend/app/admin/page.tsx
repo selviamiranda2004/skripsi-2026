@@ -45,7 +45,7 @@ function EditUserModal({
 
     try {
       const res = await fetch(
-        `http://localhost:8000/auth/users/${user.username}`,
+        `${process.env.NEXT_PUBLIC_API_URL || "/api"}/auth/users/${user.username}`,
         {
           method: "PUT",
           headers: {
@@ -183,7 +183,7 @@ export default function AdminPage() {
   const fetchUsers = async () => {
     try {
       setUsersLoading(true);
-      const res = await fetch("http://localhost:8000/auth/users", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "/api"}/auth/users`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to fetch users");
@@ -204,7 +204,7 @@ export default function AdminPage() {
       return;
     }
     try {
-      const res = await fetch("http://localhost:8000/auth/create-user", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "/api"}/auth/create-user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -227,7 +227,7 @@ export default function AdminPage() {
   const handleDeleteUser = async (username: string) => {
     if (!confirm(`Hapus user ${username}?`)) return;
     try {
-      const res = await fetch(`http://localhost:8000/auth/users/${username}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "/api"}/auth/users/${username}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -400,10 +400,10 @@ export default function AdminPage() {
       )}
 
       <main className="lg:ml-64 min-h-screen">
-        <header className="sticky top-0 z-20 bg-white backdrop-blur-md border-b border-border px-6 py-4">
-          <div className="flex justify-between items-center">
+        <header className="sticky top-0 z-20 bg-white backdrop-blur-md border-b border-border px-4 sm:px-6 py-4">
+          <div className="hidden sm:flex sm:justify-between sm:items-center">
             <h1 className="text-xl font-semibold text-black">{getPageTitle()}</h1>
-            <div className="flex gap-4 items-center">
+            <div className="flex items-center gap-4">
               <AutoRefreshIndicator state={autoRefresh} />
               <span className="text-sm text-black">
                 {user?.username} ({user?.role})
@@ -411,6 +411,26 @@ export default function AdminPage() {
               <button
                 onClick={handleLogout}
                 className="bg-red-500 text-white px-3 py-1 rounded text-sm"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+
+          <div className="sm:hidden space-y-3">
+            <div className="flex items-center justify-between gap-2 min-w-0">
+              <h1 className="text-lg font-semibold text-black truncate">{getPageTitle()}</h1>
+              <div className="shrink-0">
+                <AutoRefreshIndicator state={autoRefresh} />
+              </div>
+            </div>
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-xs text-black truncate min-w-0">
+                {user?.username}
+              </span>
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 text-white px-2.5 py-1.5 rounded text-xs shrink-0"
               >
                 Logout
               </button>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Loader2, RefreshCw, AlertCircle, AlertTriangle, Check } from "lucide-react";
 import type { AutoRefreshState } from "@/hooks/useAutoRefreshNews";
 
@@ -48,7 +48,17 @@ function formatInterval(sec: number) {
  *  - merah        -> error pada refresh terakhir
  */
 export default function AutoRefreshIndicator({ state }: Props) {
-  const [hover, setHover] = useState(false);
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const {
     isRefreshing,
@@ -90,16 +100,17 @@ export default function AutoRefreshIndicator({ state }: Props) {
 
   return (
     <div
-      className="relative"
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
+      ref={rootRef}
+      className="relative w-full sm:w-auto"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
     >
       <button
         type="button"
-        onClick={() => refreshNow()}
+        onClick={() => setOpen((v) => !v)}
         disabled={isRefreshing}
-        title="Klik untuk refresh sekarang"
-        className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-medium transition ${statusStyle} hover:brightness-125 disabled:opacity-70 disabled:cursor-wait`}
+        title="Lihat status auto refresh"
+        className={`inline-flex w-auto max-w-full items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-full border text-[10px] sm:text-xs font-medium transition ${statusStyle} hover:brightness-125 disabled:opacity-70 disabled:cursor-wait whitespace-nowrap self-start shrink-0`}
       >
         {/* Dot indicator */}
         <span className="relative flex h-2 w-2">
@@ -115,31 +126,35 @@ export default function AutoRefreshIndicator({ state }: Props) {
 
         {/* Label */}
         {isRefreshing ? (
-          <span className="flex items-center gap-1.5">
-            <Loader2 size={12} className="animate-spin" />
-            Mengambil mentions...
+          <span className="flex items-center gap-1 sm:gap-1.5 min-w-0">
+            <Loader2 size={12} className="animate-spin shrink-0" />
+            <span className="hidden sm:inline">Mengambil mentions...</span>
+            <span className="sm:hidden">{formatDuration(secondsUntilNext)}</span>
           </span>
         ) : error ? (
-          <span className="flex items-center gap-1.5">
-            <AlertCircle size={12} />
-            Refresh gagal
+          <span className="flex items-center gap-1 sm:gap-1.5 min-w-0">
+            <AlertCircle size={12} className="shrink-0" />
+            <span className="hidden sm:inline">Refresh gagal</span>
+            <span className="sm:hidden">Err</span>
           </span>
         ) : warning ? (
-          <span className="flex items-center gap-1.5">
-            <AlertTriangle size={12} />
-            Tidak ada data baru
+          <span className="flex items-center gap-1 sm:gap-1.5 min-w-0">
+            <AlertTriangle size={12} className="shrink-0" />
+            <span className="hidden sm:inline">Tidak ada data baru</span>
+            <span className="sm:hidden">Warn</span>
           </span>
         ) : (
-          <span className="flex items-center gap-1.5">
-            <RefreshCw size={12} />
-            Auto • {formatDuration(secondsUntilNext)}
+          <span className="flex items-center gap-1 sm:gap-1.5 min-w-0">
+            <RefreshCw size={12} className="shrink-0" />
+            <span className="hidden sm:inline">Auto • {formatDuration(secondsUntilNext)}</span>
+            <span className="sm:hidden">{formatDuration(secondsUntilNext)}</span>
           </span>
         )}
       </button>
 
       {/* Tooltip card on hover */}
-      {hover && (
-        <div className="absolute right-0 top-full mt-2 w-64 z-50 bg-card border border-border rounded-lg shadow-xl p-3 text-xs">
+      {open && (
+        <div className="absolute right-0 top-full mt-2 w-[240px] sm:w-64 max-w-[calc(100vw-2rem)] z-50 bg-card border border-border rounded-lg shadow-xl p-3 text-xs">
           <div className="flex items-center gap-2 mb-2">
             <span className={`h-2 w-2 rounded-full ${dotStyle}`} />
             <span className="font-semibold text-foreground">

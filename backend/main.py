@@ -57,9 +57,15 @@ print("✅ DATABASE_URL LOADED:", os.getenv("DATABASE_URL"))
 
 app = FastAPI(title="Media Monitoring API", version="1.0.0")
 
+allowed_origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://skripsi-2026.vercel.app",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -1821,18 +1827,23 @@ async def svm_sample(
 @app.get("/svm/metrics")
 async def svm_metrics(current_user=Depends(get_current_user)):
     with get_db_cursor() as cursor:
-        # Hitung total data berlabel manual
         cursor.execute(
-            "SELECT COUNT(*) AS total FROM mentions WHERE sentiment_label IS NOT NULL"
+            """
+            SELECT COUNT(*) AS total FROM mentions
+            WHERE sentiment_label IS NOT NULL
+              AND mention_date >= %s AND mention_date <= %s
+            """,
+            (MENTION_DATE_MIN, MENTION_DATE_MAX),
         )
         total_labeled = cursor.fetchone()["total"]
 
-        # Ambil data yang punya keduanya untuk hitung confusion matrix
         cursor.execute(
             """
             SELECT sentiment_svm, sentiment_label FROM mentions
             WHERE sentiment_label IS NOT NULL AND sentiment_svm IS NOT NULL
-            """
+              AND mention_date >= %s AND mention_date <= %s
+            """,
+            (MENTION_DATE_MIN, MENTION_DATE_MAX),
         )
         rows = cursor.fetchall()
     if not rows:
@@ -1940,7 +1951,16 @@ async def svm_retrain(
     if not (0.05 <= test_size <= 0.5):
         raise HTTPException(400, "test_size harus 0.05 - 0.5")
 
+<<<<<<< HEAD
     df, info = load_training_data(include_db_labels=True, use_seed=False)
+=======
+   df, info = load_training_data(
+    include_db_labels=True,
+    use_seed=False,
+    db_limit=749,
+    skip_dedup=True,
+)
+>>>>>>> 6d7b12f991bc33cc19b2204869928dde0609faab
     if df["label"].nunique() < 2:
         raise HTTPException(status_code=400, detail="Dataset cuma punya 1 kelas")
 
