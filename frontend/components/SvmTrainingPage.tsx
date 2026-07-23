@@ -470,7 +470,6 @@ export default function SvmTrainingPage() {
             <p className="text-sm font-semibold mb-2 text-black">
   Confusion Matrix (n = {status?.labeled ?? metrics.labeled_count})
 </p>
-<ConfusionMatrixView cm={m.confusion_matrix} />
               <ConfusionMatrixView cm={m.confusion_matrix} />
             </div>
           </div>
