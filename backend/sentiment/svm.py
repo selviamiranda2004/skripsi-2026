@@ -1,4 +1,4 @@
-"""
+﻿"""
 SVM sentiment classifier with TF-IDF features.
 
 Pipeline:
@@ -39,8 +39,8 @@ class SVMSentimentClassifier:
         ngram_range: tuple[int, int] = (1, 2),
         min_df: int = 2,
         max_df: float = 0.95,
-        max_features: int | None = 5000,
-        C: float = 1.0,
+        max_features: int | None = 1000,
+        C: float = 0.1,
         use_stemmer: bool = True,
         random_state: int = 42,
     ):
@@ -181,3 +181,4 @@ def load_default_model() -> SVMSentimentClassifier | None:
         return SVMSentimentClassifier.load()
     except FileNotFoundError:
         return None
+

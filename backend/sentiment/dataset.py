@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
  
 import logging
 from pathlib import Path
@@ -13,6 +13,12 @@ DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 SEED_CSV = DATA_DIR / "sentiment_seed.csv"
  
 VALID_LABELS = {"positif", "negatif", "netral"}
+
+from datetime import date
+
+# Harus sama persis dengan MENTION_DATE_MIN/MAX di main.py
+MENTION_DATE_MIN = date(2026, 4, 1)
+MENTION_DATE_MAX = date(2026, 5, 31)
  
  
 # ---------------------------------------------------------------------------
@@ -38,7 +44,7 @@ def load_db_labels(min_per_class: int = 5) -> pd.DataFrame:
     Ambil mention yang sudah punya sentiment_label manual dari database.
  
     Ini adalah data yang dilabeli manual oleh peneliti lewat halaman
-    Train SVM (dashboard admin) — dan merupakan angka yang dilaporkan
+    Train SVM (dashboard admin) â€” dan merupakan angka yang dilaporkan
     sebagai "data berlabel manual" di narasi skripsi (contoh: 749 data).
  
     Kembalikan DataFrame[text,label] atau DataFrame kosong kalau belum cukup.
@@ -54,10 +60,11 @@ def load_db_labels(min_per_class: int = 5) -> pd.DataFrame:
         WHERE sentiment_label IS NOT NULL
           AND sentiment_label IN ('positif','negatif','netral')
           AND title IS NOT NULL
+          AND mention_date >= %s AND mention_date <= %s
         ORDER BY id
     """
     with get_db_cursor() as cursor:
-        cursor.execute(sql)
+        cursor.execute(sql, (MENTION_DATE_MIN, MENTION_DATE_MAX))
         rows = cursor.fetchall()
  
     if not rows:
@@ -97,7 +104,7 @@ def load_training_data(
     seed_path : Path
         Lokasi file CSV seed. Kalau file tidak ada, seed dianggap kosong.
     use_seed : bool
-        Kalau False, seed CSV SAMA SEKALI TIDAK dipakai — dataset training
+        Kalau False, seed CSV SAMA SEKALI TIDAK dipakai â€” dataset training
         murni dari data DB saja. Gunakan opsi ini kalau ingin memastikan
         angka training/testing 100% konsisten dengan angka "data berlabel
         manual" yang dilaporkan di skripsi (mis. tepat 749, bukan 873).
@@ -159,7 +166,7 @@ def _log_dataset_summary(info: dict) -> None:
         f"  Duplikat dibuang       : {info['duplicate_rows_dropped']}\n"
         f"  TOTAL DATA TRAINING    : {info['total_rows']}\n"
         "======================================================================\n"
-        "  ⚠️  Kalau total_rows berbeda dari angka 'data berlabel manual' yang\n"
+        "  âš ï¸  Kalau total_rows berbeda dari angka 'data berlabel manual' yang\n"
         "      dilaporkan di skripsi, cek apakah use_seed=True menyebabkan\n"
         "      seed CSV ikut ditambahkan ke dataset training.\n"
         "======================================================================"
