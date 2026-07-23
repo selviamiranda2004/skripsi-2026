@@ -1827,18 +1827,23 @@ async def svm_sample(
 @app.get("/svm/metrics")
 async def svm_metrics(current_user=Depends(get_current_user)):
     with get_db_cursor() as cursor:
-        # Hitung total data berlabel manual
         cursor.execute(
-            "SELECT COUNT(*) AS total FROM mentions WHERE sentiment_label IS NOT NULL"
+            """
+            SELECT COUNT(*) AS total FROM mentions
+            WHERE sentiment_label IS NOT NULL
+              AND mention_date >= %s AND mention_date <= %s
+            """,
+            (MENTION_DATE_MIN, MENTION_DATE_MAX),
         )
         total_labeled = cursor.fetchone()["total"]
 
-        # Ambil data yang punya keduanya untuk hitung confusion matrix
         cursor.execute(
             """
             SELECT sentiment_svm, sentiment_label FROM mentions
             WHERE sentiment_label IS NOT NULL AND sentiment_svm IS NOT NULL
-            """
+              AND mention_date >= %s AND mention_date <= %s
+            """,
+            (MENTION_DATE_MIN, MENTION_DATE_MAX),
         )
         rows = cursor.fetchall()
     if not rows:
