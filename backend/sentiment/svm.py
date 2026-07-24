@@ -40,7 +40,7 @@ class SVMSentimentClassifier:
         min_df: int = 2,
         max_df: float = 0.95,
         max_features: int | None = 1000,
-        C: float = 0.3,
+        C: float = 1.0,
         use_stemmer: bool = True,
         random_state: int = 42,
     ):
@@ -181,5 +181,7 @@ def load_default_model() -> SVMSentimentClassifier | None:
         return SVMSentimentClassifier.load()
     except FileNotFoundError:
         return None
+
+
 
 
